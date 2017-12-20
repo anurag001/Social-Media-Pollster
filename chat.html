@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" width="device-width, initial-scale = 1.0">
+        <title></title>
+        
+        <script>
+            var chatId = null, userName;
+            if((localStorage.getItem('chatId') != "" && localStorage.getItem('chatId') != null) && 
+               (localStorage.getItem('userName') != "" && localStorage.getItem('userName') != null))
+                {
+                    console.log("hello");
+                    chatId = localStorage.getItem('chatId');
+                    userName = localStorage.getItem('userName');
+                }
+            else{
+                window.location.href = "./errorPage.html";
+            }
+        </script>
+    </head>
+    
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        
+        .chat-container{
+            position: relative;
+            height: calc(100vh - 120px);
+            box-sizing: border-box;
+            border: 1px solid #888;
+            margin: 5px;
+        }
+        
+        .chat-input{
+            height: 110px;
+            box-sizing: border-box;
+            border: 1px solid #888;
+            margin: 5px 5px;
+            text-align: center;
+        }
+        .chat-input textarea{
+            text-align: left;
+            margin-top: 5px;
+            width: calc(100% - 20px);
+        }
+    </style>
+    
+    <body>
+        <div class="chat-container" id="chat-container">
+        </div>
+        <div class="chat-input">
+            <textarea id="chat-input-area"></textarea>
+        </div>
+        
+        <script>
+            document.getElementById("chat-input-area").onkeypress = function(e){
+                if(e.which == 13)
+                {
+                    sendMessage();
+                }
+            }
+        </script>
+        
+        <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+        <script>
+            var chat;
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyBMosoVFQACQSPVE7uj0m8GWTQkX5B44kA",
+                authDomain: "web-quickstart-48b78.firebaseapp.com",
+                databaseURL: "https://web-quickstart-48b78.firebaseio.com",
+                projectId: "web-quickstart-48b78",
+                storageBucket: "web-quickstart-48b78.appspot.com",
+                messagingSenderId: "474996469529"
+            };
+            firebase.initializeApp(config);
+            var dbRef = firebase.database().ref().child('chat');
+            var dbChat = dbRef.child(chatId);
+           // dbChat.on('value', snap => console.log(snap.val()));
+            
+            var dbMsgs = dbChat.child('messages');
+            
+            //dbRef.on('value', snap => updateChat(snap.val()));
+            
+            dbChat.on('value', snap => assignChat(snap.val()));
+            function assignChat(a)
+            {
+                chat = a;
+            }
+            dbMsgs.on('child_added', snap => newFunction(snap.val()));
+            
+            var i = 0;
+            var chatContainer = document.getElementById("chat-container");
+           
+            /*function updateChat(chat){
+                var msg = "", userName = "";
+                if(i == 0)
+                {
+                    //i = 1;
+                    var chatRoom = chat[chatId];
+                    for(y in chatRoom.messages)
+                    {
+                        msg = chatRoom.messages[y].msgBody;
+                        userName = chatRoom.users[chatRoom.messages[y].userId];
+                        console.log(userName + "  :  " + msg);
+                    }
+                }
+            }*/
+            
+            function newFunction(msg){
+                var userName = msg.userName;
+                var chatText = userName + "  :  " + msg.msgBody;
+                var newNode = document.createElement("div");
+                var textNode = document.createTextNode(chatText);
+                newNode.appendChild(textNode);
+                chatContainer.appendChild(newNode);
+            }
+            
+            
+            function sendMessage()
+            {
+                var msg = document.getElementById("chat-input-area").value;
+                document.getElementById("chat-input-area").value = "";
+                var user = userName;
+                var time = (new Date()).getTime();
+                var postData = {
+                                msgBody : msg,
+                                userName : user
+                            }
+                dbMsgs.child(time).set(postData);
+                
+                setTimeout(function(){document.getElementById("chat-input-area").value = "";}, 100);
+            }
+        </script>
+        
+    </body>
+</html>

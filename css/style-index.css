@@ -1,0 +1,171 @@
+body{
+    background: #fff;
+    margin: 0px;
+}
+
+.affix{
+    top: 0px;
+    width: 100%;
+    background: white;
+    z-index: 9999;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #ddd;
+}
+
+.header{
+    position: fixed;
+    top: 0px;
+    z-index: 9998;
+    width: 100%;
+}
+
+#logo{
+    text-align: left;
+}
+
+#logo img{
+    display: inline-block;
+    height: 70px;
+    max-width: 90%;
+}
+
+.log-reg{
+    margin-top: 18px;
+    text-align: right;
+}
+
+.log-reg .btn{
+    background: #F2711C;
+    color: #fff;
+    transition: 0.1s all ease;
+}
+
+.log-reg .btn:hover{
+    background: #E56B1B;
+}
+
+.log-reg .btn:nth-child(1){
+    margin-right: 10px;
+}
+
+.hero{
+    position: relative;
+    top: 0px;
+    background-image: url(../img/hero1.jpg);
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.hero h1, .hero h4{
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+}
+
+.hero h1{
+    font-size: 3.4em;
+}
+
+.hero h4{
+    font-size: 1.5em;
+    margin-bottom: 30px;
+    max-width: 700px;
+}
+
+
+#hero-button{
+    display: block;
+    margin-top: 10px;
+    padding: 15px 40px 15px 40px;
+    background: #21BA45;
+    border: 0px;
+    border-radius: 28px;
+    font-size: 1.1em;
+    font-weight: bold;
+    letter-spacing: 0px;
+    word-spacing: 2px;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+#hero-button:hover{
+    transform: scale(1.1, 1.1);
+}
+
+legend{
+    padding-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #666;
+    border: none;
+    font-size: 2em;
+}
+
+.footer{
+    margin-top: 40px;
+    padding: 30px 10px 40px 10px;
+    background: #444;
+}
+
+.footer img{
+    height: 40px;
+    width: 40px;
+}
+
+.footer div{
+    text-align: center;
+}
+
+.footer div:nth-child(1){
+    margin-bottom: 10px;
+}
+
+.footer div:nth-child(1) a{
+    display: inline-block;
+    margin: 0px 5px 0px 5px;
+    color: #F2711C;
+}
+
+.footer div:nth-child(1) a:hover{
+    color: #E56B1B;
+}
+
+.footer div:nth-child(2){
+    color: #fff;
+}
+
+
+.footer div:nth-child(2) a{
+    font-size: 1.2em;
+    color: #fff;
+}
+
+
+*{
+}
+
+
+@media only screen and (max-width:768px){
+    #logo{
+        text-align: center;
+    }
+    
+    #logo img{
+        height: 50px;
+    }
+    
+    .log-reg{
+        text-align: center;
+        margin-top: 5px;
+    }
+    
+    .hero{
+        top: 0px;
+    }
+}

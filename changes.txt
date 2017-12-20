@@ -1,0 +1,10 @@
+no changes to number in feedController.php
+male and female ratio
+
+all controller will have session_start()
+
+no controller have session_start
+
+home.php provides session check to feedcontroller
+question.php provide session check to questionController
+

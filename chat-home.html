@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <style>
+            .enabled{
+                background: #21a1e1;
+            }
+            
+            .disabled{
+                background: grey;
+            }
+        </style>
+        
+        <link rel="stylesheet" href="style-home.css"> 
+        <script>
+            if(localStorage.getItem("chatId"))
+            {
+                localStorage.removeItem("chatId");
+            }
+            if(localStorage.getItem("userName"))
+            {
+                localStorage.removeItem("userName");
+            }
+        </script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="buttons-container">
+            <button onclick="showRooms()" id="join-button" class="disabled">Join a room</button>
+            <button id="create-room">Create new room</button>
+        </div>
+        <div class="old-rooms">
+            <div id="demo"></div>
+        </div>
+        
+        <div class="new-room">
+            <div id="form">
+                <h1>Create a new room</h1>
+                <h4>Enter your question : </h4>
+                <textarea id="question" placeholder="Enter your question"></textarea>
+                <h4>Choose your category : </h4>
+                <div>
+                    <label><input type="radio" name="interest" value="Business">Business</label>
+                    <label><input type="radio" name="interest" value="Entertainment">Entertainment</label>
+                    <label><input type="radio" name="interest" value="Food">Food</label>
+                    <label><input type="radio" name="interest" value="Lifestyle">Lifestyle</label>
+                    <label><input type="radio" name="interest" value="Politics">Politics</label>
+                    <label><input type="radio" name="interest" value="Sports">Sports</label>
+                    <label><input type="radio" name="interest" value="Technology">Technology</label>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button onclick="createChat()" id="create-chat">Create Room</button>
+                </div>
+            </div>
+        </div>
+        
+
+	
+    <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+    <script>
+        var chat;
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBMosoVFQACQSPVE7uj0m8GWTQkX5B44kA",
+            authDomain: "web-quickstart-48b78.firebaseapp.com",
+            databaseURL: "https://web-quickstart-48b78.firebaseio.com",
+            projectId: "web-quickstart-48b78",
+            storageBucket: "",
+            messagingSenderId: "474996469529"
+        };
+        firebase.initializeApp(config);
+        var dbRef = firebase.database().ref().child("chat");
+        dbRef.on('value', snap => assignChat(snap.val()));
+        
+        function assignChat(a){
+            chat = a;
+            document.getElementById("join-button").className = "enabled";
+            console.log("okay");
+        }
+        
+        var questions_container = document.getElementById("demo");
+
+        function showRooms(){
+            var txt = "";
+            for(x in chat)
+            {
+                var topic = chat[x].chatQues;
+                txt += '<a href="javascript:void" data-chatId="' + x + '" onclick="openChat(this)">' + topic + '</a><br>';
+            }
+            questions_container.innerHTML = txt;
+            $(".old-rooms").fadeIn(300);
+        }
+        
+        function openChat(a){
+            var d = new Date();
+            var time = d.getTime();
+            var diff = time - (new Date("09-01-2017")).getTime();
+            console.log(diff);
+            var userName = "Anon"+diff;
+            var chatId = a.getAttribute("data-chatId");
+            localStorage.setItem("chatId", chatId);
+            localStorage.setItem("userName", userName);
+            dbRef.child(chatId).child('users').child(diff).set({userName});
+            console.log(chatId);
+            window.location.href = './chat.html';
+        }
+        
+        
+        function createChat(){
+            var d = new Date();
+            var time = d.getTime();
+            var chatId = time - (new Date("09-01-2017")).getTime()
+            var ques = document.getElementById("question").value;
+            var interests = document.getElementsByName("interest");
+            for(x = 0; x < interests.length; x++)
+            {
+                if(interests[x].checked == true)
+                {
+                    interest = interests[x].value;
+                }
+            }
+            var postData = {
+                                chatQues : ques,
+                                chatCategory : interest
+                            };
+            dbRef.child(chatId).set(postData);
+            var diff = chatId + 12345;
+            var userName = "Anon"+diff;
+            localStorage.setItem("chatId", chatId);
+            localStorage.setItem("userName", userName);
+            dbRef.child(chatId).child('users').child(diff).set({userName});
+            console.log(chatId);
+            window.location.href = './chat.html';
+        }
+    </script>
+        
+    <script>
+        $("#create-room").click(function(){
+            $(".new-room").fadeIn(300);
+        });    
+    </script>
+    </body>
+    
+</html>
